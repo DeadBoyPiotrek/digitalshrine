@@ -1,6 +1,11 @@
 import { Icons } from '@/components/icons';
 import Image from 'next/image';
 
+export const metadata = {
+  title: 'digital shrine',
+  description: 'Home page',
+};
+
 const Home = () => {
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center w-screen h-screen sm:gap-28 gap-14">

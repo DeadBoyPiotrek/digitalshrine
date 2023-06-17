@@ -36,6 +36,7 @@ export const Icons = () => {
         target="_blank"
         data-tooltip-content="GitHub"
         data-tooltip-id="email-tooltip"
+        aria-label="GitHub profile"
       >
         <AiFillGithub />
       </Link>
@@ -43,6 +44,7 @@ export const Icons = () => {
         onClick={handleClickCopy}
         data-tooltip-content="Click to copy"
         data-tooltip-id="email-tooltip"
+        aria-label="copy email to clipboard"
       >
         <MdOutlineMailOutline />
       </button>
@@ -51,6 +53,7 @@ export const Icons = () => {
         target="_blank"
         data-tooltip-content="Blog"
         data-tooltip-id="email-tooltip"
+        aria-label="blog"
       >
         <FiAlignLeft />
       </Link>
