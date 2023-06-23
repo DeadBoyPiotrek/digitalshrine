@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons';
+import { Imposter } from '@/components/imposter';
 import Image from 'next/image';
 
 export const metadata = {
@@ -15,14 +16,9 @@ const Home = () => {
           <Icons />
         </div>
       </div>
-      <div className="flex-1 flex">
-        <div className="max-w-xs ">
-          <Image
-            src={'https://github.com/DeadBoyPiotrek.png'}
-            width={200}
-            height={200}
-            alt="DeadBoyPiotrek"
-          />
+      <div className="flex-1 flex h-[700px] ">
+        <div className="max-w-xs h-full ">
+          <Imposter />
         </div>
       </div>
     </div>

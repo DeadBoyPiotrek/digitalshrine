@@ -1,0 +1,11 @@
+Model Information:
+* title:	Among Us
+* source:	https://sketchfab.com/3d-models/among-us-f391d46f6c814f85981ff0947b5bb68b
+* author:	Cesar_24 (https://sketchfab.com/Cesar_24)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Among Us" (https://sketchfab.com/3d-models/among-us-f391d46f6c814f85981ff0947b5bb68b) by Cesar_24 (https://sketchfab.com/Cesar_24) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
