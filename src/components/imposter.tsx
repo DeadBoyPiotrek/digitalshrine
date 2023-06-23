@@ -2,14 +2,28 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Imposter3d } from './imposter3d';
-import { ContactShadows } from '@react-three/drei';
+import {
+  ContactShadows,
+  Environment,
+  OrbitControls,
+  Sphere,
+  useEnvironment,
+} from '@react-three/drei';
 
 export const Imposter = () => {
+  const env = useEnvironment({ files: '/among_us/studio.hdr' });
   return (
     <Canvas>
       <pointLight position={[10, 10, 10]} />
+      <ambientLight intensity={0.05} />
+      {/* <Sphere args={[1, 32, 32]} position={[0, 0, 0]}>
+        <meshStandardMaterial roughness={0.1} metalness={1} envMap={env} />
+      </Sphere> */}
+
       <Imposter3d />
-      {/* <ContactShadows position={[0, -1, 0]} blur={2.3} scale={20} far={11} /> */}
+      <ContactShadows position={[0, -1, 0]} blur={1} scale={4} far={11} />
+      <OrbitControls />
+      <Environment map={env} />
     </Canvas>
   );
 };
