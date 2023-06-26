@@ -9,10 +9,10 @@ Title: Among Us
 */
 
 import * as THREE from 'three';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useGLTF, useAnimations, useEnvironment } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-
+import { useState } from 'react';
 type GLTFResult = GLTF & {
   nodes: {
     Object_7: THREE.SkinnedMesh;
@@ -40,17 +40,55 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     '/among_us/scene.gltf'
   ) as GLTFResult;
   const { actions } = useAnimations<GLTFActions>(animations, group);
+  //! animation mouse
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
+  useEffect(() => {
+    function handleMouseMove(event) {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  function mapCursorPosition2(
+    cursorPosition: { x: number; y: number },
+    minX = 0,
+    maxX = window.innerWidth,
+    minY = 0,
+    maxY = window.innerHeight
+  ) {
+    const rangeX = maxX - minX;
+    const rangeY = maxY - minY;
+    const mappedX = ((cursorPosition.x - minX) / rangeX) * 2 - 1 - 0.3;
+    const mappedY = ((cursorPosition.y - minY) / rangeY) * 2 - 1;
+    return { x: mappedX * 1, y: mappedY * 0.5 };
+  }
+
+  //! animation mouse
   // run animation
-  actions['Walking'].play();
+  // useEffect(() => {
+  //   actions['Walking'].play();
+  // });
   const envMap = useEnvironment({ files: '/among_us/studio.hdr' });
   return (
     <group
       ref={group}
       {...props}
       dispose={null}
-      scale={2}
-      position={[-0.2, -1, 1]}
+      scale={2.5}
+      position={[0, -1, 0]}
+      // rotation={[cursorPosition.x, cursorPosition.y / 2, 0]}
+
+      rotation={[
+        mapCursorPosition2(cursorPosition).y,
+        mapCursorPosition2(cursorPosition).x,
+        0,
+      ]}
     >
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
