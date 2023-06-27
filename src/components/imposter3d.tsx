@@ -7,7 +7,7 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/among-us-f391d46f6c814f85981ff0947b5bb68b
 Title: Among Us
 */
-
+import { useSpring, animated, useSpringValue } from '@react-spring/three';
 import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
 import { useGLTF, useAnimations, useEnvironment } from '@react-three/drei';
@@ -39,12 +39,17 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials, animations } = useGLTF(
     '/among_us/scene.gltf'
   ) as GLTFResult;
-  const { actions } = useAnimations<GLTFActions>(animations, group);
+  // const { actions } = useAnimations<GLTFActions>(animations, group);
   //! animation mouse
+  const [rotation, setRotation] = useSpring(() => ({
+    x: 0,
+    y: 0,
+    config: { mass: 1, tension: 120, friction: 14 },
+  }));
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
-    function handleMouseMove(event) {
+    function handleMouseMove(event: MouseEvent) {
+      // setRotation({ x: event.clientX, y: event.clientY });
       setCursorPosition({ x: event.clientX, y: event.clientY });
     }
 
@@ -55,20 +60,21 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     };
   }, []);
 
-  function mapCursorPosition2(
+  function mapCursorPosition(
     cursorPosition: { x: number; y: number },
-    minX = 0,
     maxX = window.innerWidth,
-    minY = 0,
     maxY = window.innerHeight
   ) {
-    const rangeX = maxX - minX;
-    const rangeY = maxY - minY;
-    const mappedX = ((cursorPosition.x - minX) / rangeX) * 2 - 1 - 0.3;
-    const mappedY = ((cursorPosition.y - minY) / rangeY) * 2 - 1;
+    const rangeX = maxX;
+    const rangeY = maxY;
+    const mappedX = (cursorPosition.x / rangeX) * 2 - 1 - 0.3;
+    const mappedY = (cursorPosition.y / rangeY) * 2 - 1;
     return { x: mappedX * 1, y: mappedY * 0.5 };
+    // setRotation({ x: mappedX * 1, y: mappedY * 0.5 });
   }
 
+  const x = useSpringValue(mapCursorPosition(cursorPosition).x);
+  console.log(x);
   //! animation mouse
   // run animation
   // useEffect(() => {
@@ -76,7 +82,7 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   // });
   const envMap = useEnvironment({ files: '/among_us/studio.hdr' });
   return (
-    <group
+    <animated.group
       ref={group}
       {...props}
       dispose={null}
@@ -85,8 +91,11 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
       // rotation={[cursorPosition.x, cursorPosition.y / 2, 0]}
 
       rotation={[
-        mapCursorPosition2(cursorPosition).y,
-        mapCursorPosition2(cursorPosition).x,
+        mapCursorPosition(cursorPosition).y,
+        // mapCursorPosition(cursorPosition).x,
+        x,
+        // rotation.x,
+        // rotation.y,
         0,
       ]}
     >
@@ -142,7 +151,7 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
           </group>
         </group>
       </group>
-    </group>
+    </animated.group>
   );
 }
 
