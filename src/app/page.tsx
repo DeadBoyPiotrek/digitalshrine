@@ -1,6 +1,5 @@
 import { Icons } from '@/components/icons';
-import { Imposter } from '@/components/imposter';
-import Image from 'next/image';
+import { Scene } from '@/components/scene';
 
 export const metadata = {
   title: 'digital shrine',
@@ -18,7 +17,7 @@ const Home = () => {
       </div>
       <div className="flex-1 flex h-[700px] ">
         <div className="max-w-xs h-full ">
-          <Imposter />
+          <Scene />
         </div>
       </div>
     </div>

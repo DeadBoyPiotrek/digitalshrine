@@ -11,11 +11,15 @@ Title: Among Us
 import { motion } from 'framer-motion-3d';
 
 import * as THREE from 'three';
-import React, { useEffect, useRef } from 'react';
-import { useGLTF, useEnvironment } from '@react-three/drei';
+import { useEffect, useRef } from 'react';
+import { useAnimations, useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-import { useState } from 'react';
 import { useSpring } from 'framer-motion';
+type ActionName = 'Walking';
+// type GLTFActions = Record<ActionName, THREE.AnimationAction>;
+interface GLTFAction extends THREE.AnimationClip {
+  name: ActionName;
+}
 type GLTFResult = GLTF & {
   nodes: {
     Object_7: THREE.SkinnedMesh;
@@ -32,14 +36,25 @@ type GLTFResult = GLTF & {
     MainBlack: THREE.MeshStandardMaterial;
     Black: THREE.MeshStandardMaterial;
   };
+  animations: GLTFAction[];
 };
-
-type ActionName = 'Walking';
-type GLTFActions = Record<ActionName, THREE.AnimationAction>;
 
 export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>();
-  const { nodes, materials } = useGLTF('/among_us/scene.gltf') as GLTFResult;
+  const { nodes, materials, animations } = useGLTF(
+    'among_us/scene.gltf'
+  ) as GLTFResult;
+  const { actions } = useAnimations(animations, group);
+  useEffect(() => {
+    if (actions.Walking) actions?.Walking.play();
+  });
+
+  const startWalking = () => {
+    actions?.Walking?.reset().fadeIn(0.5).play();
+  };
+  const stopWalking = () => {
+    actions?.Walking?.fadeOut(1.5);
+  };
 
   useEffect(() => {
     function handleMouseMove(event: MouseEvent) {
@@ -52,23 +67,12 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  });
 
-  function mapCursorPosition(
-    cursorPosition: { x: number; y: number },
-    maxX = window.innerWidth,
-    maxY = window.innerHeight
-  ) {
-    const rangeX = maxX;
-    const rangeY = maxY;
-    const mappedX = (cursorPosition.x / rangeX) * 2 - 1 - 0.3;
-    const mappedY = (cursorPosition.y / rangeY) * 2 - 1;
-    return { x: mappedX * 1, y: mappedY * 0.5 };
-  }
   const mapCursorPositionX = (cursorPositionX: number) => {
     const rangeX = window.innerWidth;
     const mappedX = (cursorPositionX / rangeX) * 2 - 1 - 0.3;
-    return mappedX * 1;
+    return mappedX * 0.7;
   };
   const mapCursorPositionY = (cursorPositionY: number) => {
     const rangeY = window.innerHeight;
@@ -77,12 +81,12 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   };
 
   const springPropsX = useSpring(0, {
-    stiffness: 50,
-    damping: 10,
+    stiffness: 70,
+    damping: 15,
   });
   const springPropsY = useSpring(0, {
-    stiffness: 50,
-    damping: 10,
+    stiffness: 70,
+    damping: 15,
   });
 
   return (
@@ -93,6 +97,7 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
       scale={2.5}
       position={[0, -1, 0]}
       rotation={[springPropsY, springPropsX, 0]}
+      className="bg-red-50"
     >
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
@@ -105,6 +110,8 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
                   <group name="Manos_52" />
                   <group name="Mochila_53" />
                   <skinnedMesh
+                    onPointerEnter={stopWalking}
+                    onPointerLeave={startWalking}
                     name="Object_7"
                     geometry={nodes.Object_7.geometry}
                     material={materials.MainplasticAlive}
@@ -150,4 +157,4 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('public/among_us/scene.gltf');
+useGLTF.preload('among_us/scene.gltf');
