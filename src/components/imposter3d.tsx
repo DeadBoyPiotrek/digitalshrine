@@ -42,7 +42,7 @@ type GLTFResult = GLTF & {
 export function Imposter3d(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>();
   const { nodes, materials, animations } = useGLTF(
-    'among_us/scene.gltf'
+    'character/scene.gltf'
   ) as GLTFResult;
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
@@ -91,13 +91,13 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
 
   return (
     <motion.group
+      // @ts-ignore
       ref={group}
       {...props}
       dispose={null}
-      scale={2.5}
-      position={[0, -1, 0]}
+      scale={3.5}
+      position={[0, -1.5, 0]}
       rotation={[springPropsY, springPropsX, 0]}
-      className="bg-red-50"
     >
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
@@ -156,5 +156,3 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     </motion.group>
   );
 }
-
-useGLTF.preload('among_us/scene.gltf');
