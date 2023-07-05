@@ -75,12 +75,12 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
 
   //* spring props
   const springPropsX = useSpring(0, {
-    stiffness: 70,
-    damping: 15,
+    stiffness: 110,
+    damping: 30,
   });
   const springPropsY = useSpring(0, {
-    stiffness: 70,
-    damping: 15,
+    stiffness: 210,
+    damping: 30,
   });
   //* spring props
 
