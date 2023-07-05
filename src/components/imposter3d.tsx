@@ -9,12 +9,15 @@ Title: Among Us
 */
 
 import { motion } from 'framer-motion-3d';
-
 import * as THREE from 'three';
 import { useEffect, useRef } from 'react';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useSpring } from 'framer-motion';
+import {
+  mapCursorPositionX,
+  mapCursorPositionY,
+} from '@/helpers/cursor/mapCursorPosition';
 type ActionName = 'Walking';
 // type GLTFActions = Record<ActionName, THREE.AnimationAction>;
 interface GLTFAction extends THREE.AnimationClip {
@@ -45,41 +48,32 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     'character/scene.gltf'
   ) as GLTFResult;
   const { actions } = useAnimations(animations, group);
+  //*start action on load
   useEffect(() => {
     if (actions.Walking) actions?.Walking.play();
   });
+  //*start action on load
 
+  //* handle movement
+
+  function handleMouseMove(event: MouseEvent) {
+    springPropsX.set(mapCursorPositionX(event.clientX));
+    springPropsY.set(mapCursorPositionY(event.clientY));
+  }
+  window.addEventListener('mousemove', handleMouseMove);
+
+  //* handle movement
+
+  //* action fns
   const startWalking = () => {
     actions?.Walking?.reset().fadeIn(0.5).play();
   };
   const stopWalking = () => {
-    actions?.Walking?.fadeOut(1.5);
+    actions?.Walking?.fadeOut(0.5);
   };
+  //* action fns
 
-  useEffect(() => {
-    function handleMouseMove(event: MouseEvent) {
-      springPropsX.set(mapCursorPositionX(event.clientX));
-      springPropsY.set(mapCursorPositionY(event.clientY));
-    }
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  });
-
-  const mapCursorPositionX = (cursorPositionX: number) => {
-    const rangeX = window.innerWidth;
-    const mappedX = (cursorPositionX / rangeX) * 2 - 1 - 0.3;
-    return mappedX * 0.7;
-  };
-  const mapCursorPositionY = (cursorPositionY: number) => {
-    const rangeY = window.innerHeight;
-    const mappedY = (cursorPositionY / rangeY) * 2 - 1;
-    return mappedY * 0.5;
-  };
-
+  //* spring props
   const springPropsX = useSpring(0, {
     stiffness: 70,
     damping: 15,
@@ -88,6 +82,7 @@ export function Imposter3d(props: JSX.IntrinsicElements['group']) {
     stiffness: 70,
     damping: 15,
   });
+  //* spring props
 
   return (
     <motion.group
