@@ -1,6 +1,6 @@
 import './globals.css';
 import { Ubuntu } from 'next/font/google';
-
+import { Analytics } from '@vercel/analytics/react';
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '400'] });
 
 export const metadata = {
@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={ubuntu.className}>
         <main>{children}</main>
+        <Analytics />
       </body>
     </html>
   );
