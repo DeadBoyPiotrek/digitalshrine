@@ -1,5 +1,7 @@
 import { Icons } from '@/components/icons';
 import { Scene } from '@/components/scene';
+import Image from 'next/image';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'digital shrine',
@@ -15,10 +17,19 @@ const Home = () => {
           <Icons />
         </div>
       </div>
-      <div className=" flex h-[400px] ">
-        <div className="max-w-xs h-full min-w-">
+      <div className="flex min-w-[300px] h-[400px] items-center justify-center ">
+        <Suspense
+          fallback={
+            <Image
+              src={'https://github.com/DeadBoyPiotrek.png'}
+              alt="github avatar"
+              width={200}
+              height={200}
+            />
+          }
+        >
           <Scene />
-        </div>
+        </Suspense>
       </div>
     </div>
   );
