@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { AiFillGithub } from 'react-icons/ai';
 import { MdOutlineMailOutline } from 'react-icons/md';
 import { FiAlignLeft } from 'react-icons/fi';
@@ -24,7 +23,7 @@ export const Icons = () => {
         style={{ fontSize: '1rem' }}
       />
 
-      <Link
+      <a
         className="hidden lg:block"
         href="https://github.com/DeadBoyPiotrek"
         data-tooltip-content="GitHub"
@@ -32,13 +31,13 @@ export const Icons = () => {
         aria-label="GitHub profile"
       >
         <AiFillGithub />
-      </Link>
-      <Link
+      </a>
+      <a
         className="lg:hidden sm:block text-xl"
         href="https://github.com/DeadBoyPiotrek"
       >
         github
-      </Link>
+      </a>
       <button
         className="hidden lg:block"
         onClick={() => {
@@ -60,7 +59,7 @@ export const Icons = () => {
       >
         email
       </button>
-      <Link
+      <a
         className="hidden lg:block"
         href="https://digital-shrine.vercel.app"
         data-tooltip-content="Blog"
@@ -68,13 +67,13 @@ export const Icons = () => {
         aria-label="blog"
       >
         <FiAlignLeft />
-      </Link>
-      <Link
+      </a>
+      <a
         className="lg:hidden sm:block text-xl"
         href="https://digital-shrine.vercel.app"
       >
         blog
-      </Link>
+      </a>
     </div>
   );
 };
